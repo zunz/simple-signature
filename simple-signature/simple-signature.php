@@ -14,8 +14,13 @@ define ( 'SSN_PLUGIN_URL', plugins_url ( '', __FILE__ ) );
 
 function tambah_tanda_tangan_func($content) {
 	if(is_single() || is_page()):
-		$output = '<div class="simple-signature"><img src="'.SSN_PLUGIN_URL.'/sign.png" alt="" class="alignright"></div>';
-		$content .= $output;
+		$settings = get_option( 'ssn_settings' );
+		if(!empty($settings) && isset($settings['image'])):
+			$align = $settings['align'] ? $settings['align'] : 'alignleft';
+			$src = wp_get_attachment_url( $settings['image'] );
+			$output = '<div class="simple-signature"><img src="'.$src.'" alt="" class="'.$align.'"></div>';
+			$content .= $output;
+		endif;
 	endif;
     return $content;
 }
